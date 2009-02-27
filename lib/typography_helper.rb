@@ -19,13 +19,13 @@ module TypographyHelper
 	# before a closing tag (p, h[1-6], li, dt, dd) or the end of the string
 	def widont(text)
 		text.gsub(%r/
-			(\s+)																			# some whitespace group 1
-			(																					# capture group 2
-				(<(a|em|span|strong)[^>]*?>\s*)?				# an optional opening tag followed by optional spaces
-				[^<>\s]+																# the matched word itself
-				(?:<\/(a|em|span|strong)[^>]*?>\s*)*		# zero or more inline closing tags followed by zero or more spaces
-				(?:(<\/p|h[1-6]|li|dt|dd)|$)						# a closing element or end of line
-			/x, '&nbsp;\2')
+			(\s+)																						# some whitespace group 1
+			(																								# capture group 2
+				(?:<(?:a|em|span|strong|i|b)[^>]*?>\s*)?			# an optional opening tag
+				[^<>\s]+																			# the matched word itself
+				(?:<\/(?:a|em|span|strong|i|b)[^>]*?>\s*)?		# optional inline closing tags
+				(?:\s*?<\/(?:p|h[1-6]|li|dt|dd)>)							# a closing element
+			)/x, '&nbsp;\2')
 	end
 
 	# speedier method for one-line elements only (if you care about performance)
@@ -40,8 +40,9 @@ module TypographyHelper
 	# in a span with a styled class
 	def caps(text)
 		# $1 is an excluded HTML tag, $2 is the part before the caps and $3 is the caps match
-		text.gsub(/<(code|pre).+?<\/\1>|(\s|&nbsp;|^|'|")([A-Z][A-Z\d\.]{1,})(?!\w)/) {|str|
-		$1 ? str : $2 + '<span class="caps">' + $3 + '</span>' }
+		text.gsub(/<(code|pre).+?<\/\1>|(\s|&nbsp;|^|'|"|(?:<(?:h[1-6]|p|li|dt|dd)[^>]*>|^))([A-Z][A-Z\d\.]{1,})(?!\w)/) { |str|
+			$1 ? str : $2 + '<span class="caps">' + $3 + '</span>'
+		}
 	end
 
 	# encloses initial single or double quote, or their entities
@@ -63,7 +64,7 @@ module TypographyHelper
 	
 	# main function to do all the functions from the method
 	def rubyshirt(text)
-		initial_quotes amp(caps(widont(text)))
+		initial_quotes( amp( caps( widont( text ) ) ) )
 	end
 	
 	# function to perform rubyshirt and rubypants
