@@ -2,5 +2,5 @@
 require "typography_helper"
 
 class ActionView::Base
-	include TypographyHelper
+  include TypographyHelper
 end
