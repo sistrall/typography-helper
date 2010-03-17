@@ -18,6 +18,7 @@ class TypographyHelperTest < Test::Unit::TestCase
     @test_string6 = '<a href="http://topfunky.com/clients/peepcode/REST-cheatsheet.pdf">Handy Cheat Sheet</a>'
     @test_string7 = '<code>Test CAPS and & in code</code> & and CAPS outside'
     @test_string8 = '<p>Testing closing inline tag with a space after it <span>span</span> </p>'
+    @test_string9 = '<a href="/the-project/related-links/">Related links</a>'
   end
 
   def test_amp
@@ -46,6 +47,7 @@ class TypographyHelperTest < Test::Unit::TestCase
     assert_equal '<h2>Standard HTML Header Tag --&nbsp;fun</h2>', widont(@test_string4)
     assert_equal '<h1>this is THE&nbsp;title</h1><p>"this is a&nbsp;paragraph"</p>', widont(@test_string5)
     assert_equal '<p>Testing closing inline tag with a space after it&nbsp;<span>span</span> </p>', widont(@test_string8)
+    assert_equal '<a href="/the-project/related-links/">Related links</a>', widont(@test_string9)
   end
 
   def test_inital_quotes
